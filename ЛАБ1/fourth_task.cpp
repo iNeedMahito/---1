@@ -4,32 +4,61 @@
 
 int main() {
     srand(time(NULL));
-    const int rows = 6, cols = 8;
-    int mass[rows][cols];
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            mass[i][j] = rand() % 30;
+    int n;
+    std::cout << "Размерность квадратного массива: ";
+    std::cin >> n;
+
+    if (n <= 0) {
+        std::cout << "Некорректный размер\n";
+        return 0;
+    }
+
+    // динамическое выделение памяти под квадратный массив n x n
+    int** mass = new int*[n];
+    for (int i = 0; i < n; i++) {
+        mass[i] = new int[n];
+    }
+
+    // заполнение случайными числами от -40 до 35
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            mass[i][j] = -40 + rand() % (35 - (-40) + 1);
+        }
+    }
+
+    // вывод матрицы на экран
+    std::cout << "\nМатрица:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             std::cout << mass[i][j] << "\t";
         }
         std::cout << "\n";
     }
-    std::cout << "\n";
 
-    for (int i = 0; i < rows; i++) {
-        int sum = 0;
-        for (int j = 0; j < cols; j++) {
-            sum += mass[i][j];
+    // поиск количества и суммы элементов строго ниже главной диагонали
+    // главная диагональ - элементы, где i == j
+    // "строго ниже" - это элементы, где i > j
+    int kolvo = 0;
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i > j) {
+                sum += mass[i][j];
+                kolvo++;
+            }
         }
-        std::cout << "Строка " << i + 1 << " - " << sum << "\n";
     }
-    std::cout << "\n";
 
-    for (int j = 0; j < cols; j++) {
-        int sum = 0;
-        for (int i = 0; i < rows; i++) {
-            sum += mass[i][j];
-        }
-        std::cout << "Столбец " << j + 1 << " - " << sum << "\n";
+    std::cout << "\nЭлементы строго ниже главной диагонали:\n";
+    std::cout << "Количество = " << kolvo << "\n";
+    std::cout << "Сумма = " << sum << "\n";
+
+    // освобождение динамической памяти
+    for (int i = 0; i < n; i++) {
+        delete[] mass[i];
     }
+    delete[] mass;
 }
+// динамический двумерный квадратныйы массив размерность которого задает польлзователь 
+//заполнить элементами от -40 до 35 найти кол-во и сумму элементов распологающихся строго ниже главной диагонали 5
